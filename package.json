@@ -6,11 +6,12 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "node app.js",
-    "postinstall": "./node_modules/bin/bower i"
+    "postinstall": "./node_modules/.bin/bower i"
   },
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "bower": "^1.8.0",
     "express": "^4.15.3",
     "mongoose": "^4.11.1",
     "socket.io": "^2.0.3"
