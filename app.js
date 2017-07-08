@@ -4,9 +4,10 @@ var express = require('express'),
 	io = require('socket.io')(server),
 	db = require('./server/db');
 
-server.listen(3000, () => console.log('Running server on port 3000'));
+server.listen(process.env.PORT || 3000, () => console.log('Running server on port 3000'));
 
 app.use(express.static(__dirname + '/public'));
+app.use(express.static(__dirname + '/bower_components'));
 
 
 io.on('connection', (socket) => {
