@@ -7,11 +7,33 @@
 <body ng-controller="main as main">
 <h2>{{main.name}}</h2>
 
-<input type="text" ng-model="main.accountName">
-<button ng-click="main.createAccount()">Create Account</button>
+<!-- <form action="#">
+	<input type="text" ng-model="main.accountName">
+	<button type="submit" ng-click="main.createAccount()">Create Account</button>
+</form> -->
+
+<form action="#" ng-submit="main.login()">
+	<input type="text" placeholder="Account name" ng-model="main.username">
+	<button type="submit">Log in</button>
+</form>
+
+<div class="create-post" ng-show="main.loggedIn">
+	<h3>Create a post</h3>
+	<form action="#">
+		<input type="text" placeholder="Title" ng-model="main.postTitle"><br>
+		<textarea name="" id="" cols="30" rows="10" placeholder="Content" ng-model="main.postContent"></textarea><br>
+		<button type="submit" ng-click="main.createPost()">Create post</button>
+	</form>
+</div>
 
 <div class="accounts">
-	<div ng-repeat="account in main.accounts">{{account.username}}</div>
+	<div ng-repeat="account in main.accounts">
+		{{account.username}}
+		<div ng-repeat="post in account.posts">
+			<h4>{{post.title}}</h4>
+			<div>{{post.body}}</div>
+		</div>
+	</div>
 </div>
 
 <script src="/socket.io/socket.io.js"></script>
