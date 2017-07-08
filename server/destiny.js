@@ -1,28 +1,44 @@
-// var request = require('request');
-// var passport = require('passport');
-// var OAuth2Strategy = require('passport-oauth2');
-
-// // GET https://www.bungie.net/Platform/User/GetBungieNetUser/ HTTP/1.1
-// // Host: www.bungie.net
-// // Connection: keep-alive
-// // Accept: application/json, text/javascript, */*; q=0.01
-// // Origin: https://example.com
-// // User-Agent: app-platform
-// // Authorization: Bearer CHMS5gEAIGouCzYA...CWpeDmBF2SN9Khan7Q==
-// // X-API-Key: 6747e6eaab87471cb98620895e554c69
+var request = require('request');
 
 
-// passport.use(new OAuth2Strategy({
-//     authorizationURL: 'https://www.bungie.net/Platform/User/GetBungieNetUser',
-//     tokenURL: 'https://www.example.com/oauth2/token',
-//     clientID: 13954,
-//     clientSecret: EXAMPLE_CLIENT_SECRET,
-//     callbackURL: "http://localhost:3000/auth/example/callback"
-//   },
-//   function(accessToken, refreshToken, profile, cb) {
-//     User.findOrCreate({ exampleId: profile.id }, function (err, user) {
-//       return cb(err, user);
-//     });
-//   }
-// ));
-// request.get('https://www.bungie.net/Platform/Destiny/Explorer/Items', (err, data) => console.log(data.toJSON()));
+module.exports = function (io) {
+	var baseUri = 'https://www.bungie.net/Platform/Destiny/';
+
+
+	return (function(type, username){
+		var accountType;
+		if(type = 'psn')
+			accountType = 2;
+		else if (type === 'xbox')
+			accountType = 1;
+		else if (type === 'web')
+			accountType = 254;
+		console.log(accountType, username);
+
+		get(baseUri + 'SearchDestinyPlayer/'+ accountType +'/' + username, (data) => {
+			var membershipId = data.Response[0].membershipId;
+			console.log(membershipId);
+
+			get(baseUri + '/'+ accountType +'/Account/'+ membershipId +'/Summary/', 
+				(data) => {
+					io.emit('player info', data.Response.data);
+					console.log(data.Response.data)
+				});
+		})
+
+	})//('psn', 'maoesx'));
+
+	function get(uri, cb) {
+		request({
+			headers: {
+				'X-API-Key': 'fc5525b06a0e40fdbbf068a6229c9e0b'
+			},
+			uri: uri
+		},
+			(err, data) => {
+				data = JSON.parse(data.toJSON().body);
+				cb(data);
+			});
+	}
+	
+}

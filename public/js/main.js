@@ -1,4 +1,5 @@
 app.controller('main', function(socket, $scope) {
+	var self = this;
 	this.name = 'Thanks for checking out looking for group';
 	this.username;
 	this.postTitle;
@@ -15,7 +16,13 @@ app.controller('main', function(socket, $scope) {
 	}
 
 	socket.on('update accounts', (accs) => this.accounts = accs);
-
+	var base = 'https://www.bungie.net';
 	socket.emit('get accounts');
+	socket.on('player info', (data) => {
+		for(var i = 0; i < data.characters.length; i++){
+			$('body').append($('<img>', {src: base + data.characters[i].emblemPath}));
+			$('body').append($('<img>', {src: base + data.characters[i].backgroundPath}));
+		}
+	});
 });
 
