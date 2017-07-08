@@ -12,9 +12,9 @@ app.use(express.static(__dirname + '/bower_components'));
 
 
 io.on('connection', (socket) => {
-	socket.on('login', (username, cb) => {
+	socket.on('login', (system, username, cb) => {
 		socket.username = username;
-		destiny('psn', username);
+		destiny(system, username);
 		// Account.find({username}, (err, acc) => acc ? updateAccounts() : this.emit('cant find user'));
 		cb(true);
 	});

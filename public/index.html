@@ -13,6 +13,10 @@
 </form> -->
  
 <form action="#" ng-submit="main.login()">
+	<select name="" id="" ng-model="main.system">
+		<option value="psn">PSN</option>
+		<option value="xbox">Xbox</option>
+	</select>
 	<input type="text" placeholder="Account name" ng-model="main.username">
 	<button type="submit">Log in</button>
 </form>

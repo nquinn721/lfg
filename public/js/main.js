@@ -4,12 +4,13 @@ app.controller('main', function(socket, $scope) {
 	this.username;
 	this.postTitle;
 	this.postContent;
+	this.system = 'psn';
 
 	this.createAccount = function() {
 		socket.emit('create account', this.accountName);
 	}
 	this.login = function() {
-		socket.emit('login', this.username, (loggedIn) => loggedIn ? this.loggedIn = true : this.loggedIn = false);
+		socket.emit('login', this.system, this.username, (loggedIn) => loggedIn ? this.loggedIn = true : this.loggedIn = false);
 	}
 	this.createPost = function() {
 		socket.emit('create post', this.postTitle, this.postContent);
@@ -20,8 +21,8 @@ app.controller('main', function(socket, $scope) {
 	socket.emit('get accounts');
 	socket.on('player info', (data) => {
 		for(var i = 0; i < data.characters.length; i++){
-			$('body').append($('<img>', {src: base + data.characters[i].emblemPath}));
-			$('body').append($('<img>', {src: base + data.characters[i].backgroundPath}));
+			$('body').append($('<img>', {src: base + data.characters[i].emblemPath})).append($('<br>'));
+			$('body').append($('<img>', {src: base + data.characters[i].backgroundPath})).append($('<br>'));
 		}
 	});
 });
