@@ -14,9 +14,11 @@ app.use(express.static(__dirname + '/bower_components'));
 io.on('connection', (socket) => {
 	socket.on('login', (system, username, cb) => {
 		socket.username = username;
-		destiny(system, username);
+		socket.destiny = new Destiny(username, system);
+
+		// destiny.get(call, username, system);
 		// Account.find({username}, (err, acc) => acc ? updateAccounts() : this.emit('cant find user'));
-		cb(true);
+		// cb(true);
 	});
 	socket.on('create account', (username) => {
 		var account = new Account({username});
