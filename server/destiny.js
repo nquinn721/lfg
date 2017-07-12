@@ -1,4 +1,5 @@
-var request = require('request');
+var request = require('request'),
+	path = require('path');
 
 
 module.exports = function (io) {
@@ -81,8 +82,7 @@ module.exports = function (io) {
  //  state: 0,
  //  characterIndex: 0,
  //  bucketHash: 3284755031 }
- 	// maoesx.itemid = '6917529058235317231';
- 	// maoesx.get('getItem', (data) => {
+ 	// maoesx.get('summar', (data) => {
  	// 	console.log(data);
  	// })
 	// maoesx.get('items', (data) => {
@@ -94,7 +94,6 @@ module.exports = function (io) {
 	// 	// }
 	// });
 
-	return Destiny;
 	// return (function(type, username){
 	// 	var membershipType;
 		
@@ -112,17 +111,31 @@ module.exports = function (io) {
 		// })
 
 	// })//('psn', 'maoesx'));
+	// request(baseUri + 'common/destiny_content/sqlite/en/world_sql_content_02a694b624879a1d641d18ee28f53678.content', (e, d) =>{
+	// 	console.log(d.toJSON());
+	// })
 
+	// apiCall('Manifest', (d) => {
+	// 	var manifest = d.Response.mobileWorldContentPaths.en;
+	// 	console.log(manifest);
+	// 	equest({
+	// 		headers: {
+	// 			'X-API-Key': 'fc5525b06a0e40fdbbf068a6229c9e0b'
+	// 		},
+	// 		uri: baseUri + manifest
+	// 	},
+	// 		(err, data) => console.log(data));
+	// });
 	function apiCall(uri, cb) {
+		var url = baseUri +  uri;
 		request({
 			headers: {
 				'X-API-Key': 'fc5525b06a0e40fdbbf068a6229c9e0b'
 			},
-			uri: uri
+			uri: url
 		},
 			(err, data) => {
 				data = data.toJSON().body;
-				console.log(data);
 				try{
 					data = JSON.parse(data);
 					cb(data);
@@ -132,5 +145,6 @@ module.exports = function (io) {
 				}
 			});
 	}
+	return Destiny;
 	
 }
