@@ -81,10 +81,10 @@ module.exports = function (io) {
  //  state: 0,
  //  characterIndex: 0,
  //  bucketHash: 3284755031 }
- 	maoesx.itemid = '6917529058235317231';
- 	maoesx.get('getItem', (data) => {
- 		console.log(data);
- 	})
+ 	// maoesx.itemid = '6917529058235317231';
+ 	// maoesx.get('getItem', (data) => {
+ 	// 	console.log(data);
+ 	// })
 	// maoesx.get('items', (data) => {
 	// 	var item = data.items[0];
 	// 	maoesx.itemid = item.itemId;
