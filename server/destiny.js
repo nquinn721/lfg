@@ -31,7 +31,8 @@ module.exports = function (io) {
 				character: `Stats/ActivityHistory/${this.membershipType}/${this.destinyMembershipId}/${this.characterId}/`,
 				characterAdvisors: `${this.membershipType}/Account/${this.destinyMembershipId}/Character/${this.characterId}/Advisors/V2/`,
 				items: `${this.membershipType}/Account/${this.destinyMembershipId}/Items/`,
-				allItems: `Explorer/Items`
+				allItems: `Explorer/Items`,
+				getItem: `Manifest/1/${this.itemid}/`
 			}
 			return baseUri + urls[urlName];
 		},
@@ -46,14 +47,10 @@ module.exports = function (io) {
 			}
 		},
 		request: function(urlName, cb) {
-			var url = this.getURL(urlName); 
-			this.rawRequest(url, cb);
-		},
-		rawRequest: function(url, cb) {
 			this.getMembershipId(() => {
-				apiCall(baseUri + url, (data) => {
+				console.log(this.getURL(urlName));
+				apiCall(this.getURL(urlName), (data) => {
 					if(!data || data.ErrorStatus !== 'Success')return cb(data ? data.ErrorStatus : 'error');
-					console.log(data);
 					if(data && data.Response){
 						this.destinyData[urlName] = data.Response.data
 						cb && cb(data.Response.data);
@@ -74,11 +71,28 @@ module.exports = function (io) {
 	}
 	var maoesx = new Destiny('maoesx', 'psn');
 
-	maoesx.get('allItems', (data) => {
-		for(var i = 0; i < data.itemHashes.length; i++){
-			maoesx.rawRequest('Manifest/item/' + data.itemHashes[i], (data) => console.log(data));
-		}
-	});
+	// { itemHash: 4143670657,
+ //  itemId: '6917529058235317231',
+ //  quantity: 1,
+ //  damageType: 4,
+ //  damageTypeHash: 3454344768,
+ //  isGridComplete: true,
+ //  transferStatus: 3,
+ //  state: 0,
+ //  characterIndex: 0,
+ //  bucketHash: 3284755031 }
+ 	maoesx.itemid = '6917529058235317231';
+ 	maoesx.get('getItem', (data) => {
+ 		console.log(data);
+ 	})
+	// maoesx.get('items', (data) => {
+	// 	var item = data.items[0];
+	// 	maoesx.itemid = item.itemId;
+	// 	maeosx.get('getItem', (d) => console.log(d));
+	// 	// for(var i = 0; i < data.itemHashes.length; i++){
+	// 		// maoesx.rawRequest('Manifest/item/' + data.itemHashes[i], (data) => console.log(data));
+	// 	// }
+	// });
 
 	return Destiny;
 	// return (function(type, username){
@@ -107,8 +121,15 @@ module.exports = function (io) {
 			uri: uri
 		},
 			(err, data) => {
-				data = JSON.parse(data.toJSON().body);
-				cb(data);
+				data = data.toJSON().body;
+				console.log(data);
+				try{
+					data = JSON.parse(data);
+					cb(data);
+					return;
+				}catch(e){
+					// cb('error', e);
+				}
 			});
 	}
 	
